@@ -1,17 +1,17 @@
 const express = require("express");
-const bodyParse = require("body-parser");
+const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const { config } = require("./config");
 
-const app = express();
+const app = express();  
 
 //body parser
-app.use(bodyParse.json());
+app.use(bodyParser.json());
 
-app.post("/api/auth/token", function(req, res){
-    const { email, username, name } = req.body;
-    const token = jwt.sign({ sub:username, email, name }, config.authJwtSecret);
-    res.json({ access_token: token});
+app.post('/api/auth/token', (req, res) => {
+  const { email, username, name } = req.body;
+  const token = jwt.sign({ sub: username, email, name, "userType":"admin"}, config.authJwtSecret,{expiresIn:3600});
+  res.json({ acess_token: token });
 });
 
 app.get("/api/auth/verify", function(req,res,next){
